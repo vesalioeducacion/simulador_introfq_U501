@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTRODUCCIÓN A LA FISICOQUÍMICA - Mecánica de Fluidos y Biofísica (Facultad de Cs. Médicas - UCCuyo)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Outfit & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f7f9f6;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Paleta Institucional UCCuyo (Verde Oliva) */
+        .text-accent { color: #436600; }
+        .bg-accent { background-color: #436600; }
+        .bg-accent-hover:hover { background-color: #324d00; }
+        .bg-accent-light { background-color: #f1f6eb; }
+        .border-accent { border-color: #436600; }
+
+        .text-primary { color: #436600; }
+        .bg-primary { background-color: #436600; }
+        .bg-primary-dark { background-color: #324d00; }
+        .border-primary { border-color: #436600; }
+        
+        .focus-accent:focus {
+            border-color: #436600;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 102, 0, 0.2);
+        }
+        
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .canvas-bg {
+            background-color: #ffffff;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-accent/20 text-gray-800">
+
+    <!-- Cabecera Institucional UCCuyo -->
+    <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    FQ
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-800 tracking-wide uppercase">INTRODUCCIÓN A LA FISICOQUÍMICA</h1>
+                    <p class="text-xs text-gray-500 font-semibold">Lic. en Kinesiología y Fisiatría (Facultad de Cs. Médicas - UCCuyo)</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <!-- Botón Formulario -->
+                <button onclick="openFormulasModal()" class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg border border-gray-200 hover:bg-gray-200 transition">
+                    <i class="fa-solid fa-book-bookmark text-accent"></i>
+                    <span class="hidden sm:inline">Formulario</span>
+                </button>
+                <!-- Botón Guía de Uso -->
+                <button onclick="openTutorial()" class="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white text-xs font-semibold rounded-lg shadow-sm hover:opacity-90 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Guía de Uso
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal con Barra Lateral -->
+    <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col lg:flex-row gap-6">
+        
+        <!-- Menú de Navegación Lateral -->
+        <nav class="w-full lg:w-64 flex flex-row lg:flex-col gap-2 bg-white p-3 rounded-2xl shadow-sm border border-gray-100 overflow-x-auto lg:overflow-x-visible whitespace-nowrap lg:whitespace-normal sticky top-20 h-fit">
+            <button onclick="switchTab('tab-props')" id="btn-tab-props" class="bg-accent text-white flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-semibold transition shadow-sm">
+                1. Propiedades de Fluidos
+            </button>
+            <button onclick="switchTab('tab-hydro')" id="btn-tab-hydro" class="text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-medium transition">
+                2. Presión Hidrostática
+            </button>
+            <button onclick="switchTab('tab-pascal-arch')" id="btn-tab-pascal-arch" class="text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-medium transition">
+                3. Pascal & Arquímedes
+            </button>
+            <button onclick="switchTab('tab-bio')" id="btn-tab-bio" class="text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-medium transition">
+                4. Fluidos Corporales
+            </button>
+            <button onclick="switchTab('tab-casos')" id="btn-tab-casos" class="text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-medium transition">
+                5. Casos Clínicos & Biofísica
+            </button>
+        </nav>
+
+        <!-- Área de Contenido Dinámico -->
+        <div class="flex-1 space-y-6">
+
+            <!-- ==========================================
+                 MÓDULO 1: PROPIEDADES DE LOS FLUIDOS
+                 ========================================== -->
+            <section id="tab-props" class="space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4 mb-4">
+                        <div>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-accent bg-accent-light px-2.5 py-1 rounded-md">Módulo 1</span>
+                            <h2 class="text-xl font-bold text-gray-800 mt-1">Propiedades de los Fluidos: Densidad, Presión y Peso Específico</h2>
+                        </div>
+                        <div class="text-xs text-gray-500 max-w-xs">
+                            Estudio cuantitativo en el Sistema Internacional (SI) y aplicaciones biomédicas.
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Un <strong>fluido</strong> es una sustancia (líquido o gas) que carece de forma propia definida y se deforma continuamente ante la aplicación de fuerzas tangenciales o de cizallamiento. En fisicoquímica y biomecánica se analizan sus magnitudes cuantitativas fundamentales: <strong>densidad</strong> (&rho; = m/V), <strong>presión</strong> (P = F/A) y <strong>peso específico</strong> (&gamma; = P/V = &rho; &middot; g).
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Controles Interactivos -->
+                    <div class="lg:col-span-5 space-y-4 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm text-xs">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-2">
+                            <h4 class="font-bold text-gray-800 uppercase flex items-center gap-1.5 text-xs">
+                                <i class="fa-solid fa-sliders text-accent"></i> Parámetros de la Muestra
+                            </h4>
+                            <span class="text-[11px] text-gray-400 font-semibold">SI: kg, m³, Pa</span>
+                        </div>
+
+                        <!-- Selector de Sustancias -->
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1.5">Sustancia modelo:</label>
+                            <div class="grid grid-cols-3 gap-1.5">
+                                <button onclick="setSubstance('water')" id="sub-water" class="p-2 rounded-xl font-bold border-2 border-accent bg-accent-light text-accent text-center transition">
+                                    Agua Pura<br><span class="text-[10px] font-normal text-gray-500">1000 kg/m³</span>
+                                </button>
+                                <button onclick="setSubstance('blood')" id="sub-blood" class="p-2 rounded-xl font-bold border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 text-center transition">
+                                    Sangre<br><span class="text-[10px] font-normal text-gray-500">1060 kg/m³</span>
+                                </button>
+                                <button onclick="setSubstance('mercury')" id="sub-mercury" class="p-2 rounded-xl font-bold border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 text-center transition">
+                                    Mercurio<br><span class="text-[10px] font-normal text-gray-500">13600 kg/m³</span>
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-1.5 mt-1.5">
+                                <button onclick="setSubstance('oil')" id="sub-oil" class="p-1.5 rounded-xl font-semibold border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 text-center transition text-[11px]">
+                                    Aceite (920 kg/m³)
+                                </button>
+                                <button onclick="setSubstance('air')" id="sub-air" class="p-1.5 rounded-xl font-semibold border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 text-center transition text-[11px]">
+                                    Aire (1.20 kg/m³)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Slider: Masa (kg) -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between font-semibold">
+                                <span class="text-gray-700">Masa de la Muestra (m):</span>
+                                <span class="text-accent font-mono font-bold" id="val-mass">5.00 kg</span>
+                            </div>
+                            <input type="range" id="input-mass" min="0.1" max="50" step="0.1" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]" oninput="updatePropSimulator()">
+                            <div class="flex justify-between text-[10px] text-gray-400">
+                                <span>0.1 kg</span>
+                                <span>50.0 kg</span>
+                            </div>
+                        </div>
+
+                        <!-- Slider: Volumen (Litros) -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between font-semibold">
+                                <span class="text-gray-700">Volumen Ocupado (V):</span>
+                                <span class="text-accent font-mono font-bold" id="val-vol">5.00 L (0.0050 m³)</span>
+                            </div>
+                            <input type="range" id="input-vol" min="0.1" max="20" step="0.1" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]" oninput="updatePropSimulator()">
+                            <div class="flex justify-between text-[10px] text-gray-400">
+                                <span>0.1 L</span>
+                                <span>20.0 L</span>
+                            </div>
+                        </div>
+
+                        <!-- Slider: Área de Base (m²) -->
+                        <div class="space-y-1 pt-1 border-t border-gray-100">
+                            <div class="flex justify-between font-semibold">
+                                <span class="text-gray-700">Área de Contacto Base (A):</span>
+                                <span class="text-accent font-mono font-bold" id="val-area">0.050 m² (500 cm²)</span>
+                            </div>
+                            <input type="range" id="input-area" min="0.005" max="0.5" step="0.005" value="0.05" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]" oninput="updatePropSimulator()">
+                            <div class="flex justify-between text-[10px] text-gray-400">
+                                <span>50 cm²</span>
+                                <span>5000 cm²</span>
+                            </div>
+                        </div>
+
+                        <div class="p-2.5 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between text-[11px] text-gray-600">
+                            <span>Gravedad terrestre estándar (g):</span>
+                            <strong class="font-mono text-gray-800">9.81 m/s²</strong>
+                        </div>
+                    </div>
+
+                    <!-- Canvas y Dashboard de Resultados -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex flex-col items-center">
+                            <div class="w-full flex justify-between items-center mb-2 text-xs">
+                                <span class="font-bold text-gray-700 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-flask text-accent"></i> Probeta Graduada & Sensor de Presión Basal
+                                </span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-accent-light text-accent border border-accent/20">
+                                    Fluido Incompresible
+                                </span>
+                            </div>
+                            <div class="w-full relative rounded-xl border border-gray-200 overflow-hidden canvas-bg p-2 flex justify-center">
+                                <canvas id="canvas-props" width="520" height="240" class="w-full max-w-[480px] h-auto block"></canvas>
+                            </div>
+                            <span class="text-[11px] text-gray-400 mt-2 text-center">
+                                El sensor basal calcula la fuerza normal ejercida por el peso sobre la superficie de apoyo.
+                            </span>
+                        </div>
+
+                        <!-- 3 Tarjetas de Métricas -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase text-gray-400">Densidad (&rho; = m/V)</span>
+                                    <div class="text-lg font-extrabold text-accent font-mono mt-1" id="res-density-si">1000.0 kg/m³</div>
+                                </div>
+                                <div class="mt-2 text-[11px] text-gray-500 font-mono border-t border-gray-100 pt-1.5 flex justify-between">
+                                    <span>En g/cm³:</span>
+                                    <strong class="text-gray-800" id="res-density-cgs">1.000 g/cm³</strong>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase text-gray-400">Peso Específico (&gamma;)</span>
+                                    <div class="text-lg font-extrabold text-gray-800 font-mono mt-1" id="res-specific-weight">9810 N/m³</div>
+                                </div>
+                                <div class="mt-2 text-[11px] text-gray-500 font-mono border-t border-gray-100 pt-1.5 flex justify-between">
+                                    <span>&gamma; = &rho; &middot; g:</span>
+                                    <span class="text-gray-700">Peso / Volumen</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase text-gray-400">Presión Basal (P = F/A)</span>
+                                    <div class="text-lg font-extrabold text-emerald-700 font-mono mt-1" id="res-surface-pressure">981.0 Pa</div>
+                                </div>
+                                <div class="mt-2 text-[11px] text-gray-500 font-mono border-t border-gray-100 pt-1.5 flex justify-between">
+                                    <span>Fuerza normal:</span>
+                                    <strong class="text-gray-800" id="res-normal-force">49.05 N</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nota Pedagógica -->
+                        <div class="bg-accent-light border border-accent/20 p-3.5 rounded-2xl text-xs text-gray-700 space-y-1">
+                            <strong class="text-accent flex items-center gap-1.5"><i class="fa-solid fa-lightbulb"></i> Fundamento Conceptual:</strong>
+                            <p class="text-[11px] leading-relaxed text-gray-600">
+                                La densidad es una <strong>propiedad intensiva</strong> que no depende de la cantidad total de materia sino del empaquetamiento molecular. El peso específico permite calcular de forma directa las cargas que soportan las estructuras vasculares y los tejidos articulares ante columnas de líquido en reposo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 MÓDULO 2: PRESIÓN HIDROSTÁTICA Y ATMOSFÉRICA
+                 ========================================== -->
+            <section id="tab-hydro" class="space-y-6 hidden">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4 mb-4">
+                        <div>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-accent bg-accent-light px-2.5 py-1 rounded-md">Módulo 2</span>
+                            <h2 class="text-xl font-bold text-gray-800 mt-1">Presión Hidrostática, Atmosférica y Columna Corporal</h2>
+                        </div>
+                        <div class="text-xs text-gray-500 max-w-xs">
+                            Teorema Fundamental de la Hidrostática: P_h = &rho; &middot; g &middot; h.
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        En un fluido en reposo de densidad uniforme, la presión aumenta de manera directamente proporcional a la profundidad debido al peso de la columna superior. La presión total absoluta suma la presión atmosférica superficial: <strong>P_total = P_0 + &rho; &middot; g &middot; h</strong>.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Controles Hidrostática -->
+                    <div class="lg:col-span-5 space-y-4 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm text-xs">
+                        <h4 class="font-bold text-gray-800 uppercase flex items-center gap-1.5 text-xs border-b border-gray-100 pb-2">
+                            <i class="fa-solid fa-gauge-high text-accent"></i> Parámetros de la Columna
+                        </h4>
+
+                        <!-- Fluido del tanque -->
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1">Fluido en la columna:</label>
+                            <select id="sel-hydro-fluid" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800 outline-none focus-accent" onchange="updateHydroSimulator()">
+                                <option value="1000">Agua dulce (&rho; = 1000 kg/m³)</option>
+                                <option value="1025">Agua de mar (&rho; = 1025 kg/m³)</option>
+                                <option value="1060" selected>Sangre humana (&rho; = 1060 kg/m³)</option>
+                                <option value="13600">Mercurio (&rho; = 13600 kg/m³)</option>
+                                <option value="800">Alcohol etílico (&rho; = 800 kg/m³)</option>
+                            </select>
+                        </div>
+
+                        <!-- Profundidad h (m) -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between font-semibold">
+                                <span class="text-gray-700">Profundidad del sensor (h):</span>
+                                <span class="text-accent font-mono font-bold" id="val-hydro-depth">1.35 m (Corazón-pies)</span>
+                            </div>
+                            <input type="range" id="input-hydro-depth" min="0" max="10" step="0.05" value="1.35" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]" oninput="updateHydroSimulator()">
+                            <div class="flex justify-between text-[10px] text-gray-400">
+                                <span>0 m (Superficie)</span>
+                                <span>1.35 m (Bipedestación)</span>
+                                <span>10.0 m</span>
+                            </div>
+                        </div>
+
+                        <!-- Presión Atmosférica Toggle -->
+                        <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-gray-800">Sumar Presión Atmosférica (P₀):</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="check-hydro-atm" class="sr-only peer" checked onchange="updateHydroSimulator()">
+                                    <div class="w-9 h-5 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accent"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] text-gray-500">
+                                <span>P₀ al nivel del mar:</span>
+                                <span class="font-mono font-bold text-gray-700">101.325 Pa (1.00 atm = 760 mmHg)</span>
+                            </div>
+                        </div>
+
+                        <!-- Presets Kinesiológicos y Físicos -->
+                        <div>
+                            <span class="block text-[11px] font-bold text-gray-500 uppercase mb-1.5">Escenarios Biomédicos:</span>
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <button onclick="setHydroPreset(1.35, 1060, true)" class="p-2 bg-gray-50 hover:bg-accent-light hover:border-accent border border-gray-200 rounded-xl font-semibold text-left transition">
+                                    🦶 <strong>Corazón a Pies</strong><br><span class="text-[10px] text-gray-500">h = 1.35 m, Sangre</span>
+                                </button>
+                                <button onclick="setHydroPreset(0.35, 1060, true)" class="p-2 bg-gray-50 hover:bg-accent-light hover:border-accent border border-gray-200 rounded-xl font-semibold text-left transition">
+                                    🧠 <strong>Corazón a Cerebro</strong><br><span class="text-[10px] text-gray-500">h = 0.35 m, Sangre</span>
+                                </button>
+                                <button onclick="setHydroPreset(10.0, 1000, true)" class="p-2 bg-gray-50 hover:bg-accent-light hover:border-accent border border-gray-200 rounded-xl font-semibold text-left transition">
+                                    🤿 <strong>Buceo a 10 m</strong><br><span class="text-[10px] text-gray-500">Duplica P_total a ~2 atm</span>
+                                </button>
+                                <button onclick="setHydroPreset(0.76, 13600, false)" class="p-2 bg-gray-50 hover:bg-accent-light hover:border-accent border border-gray-200 rounded-xl font-semibold text-left transition">
+                                    🧪 <strong>Torricelli (Hg)</strong><br><span class="text-[10px] text-gray-500">760 mmHg &equiv; 1 atm</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Canvas y Resultados Hidrostáticos -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex flex-col items-center">
+                            <div class="w-full flex justify-between items-center mb-2 text-xs">
+                                <span class="font-bold text-gray-700 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-water text-accent"></i> Sonda Manométrica y Gradiente Lineal de Presión
+                                </span>
+                                <span class="font-mono font-bold text-accent" id="indicator-depth-tag">h = 1.35 m</span>
+                            </div>
+                            <div class="w-full relative rounded-xl border border-gray-200 overflow-hidden canvas-bg p-2 flex justify-center">
+                                <canvas id="canvas-hydro" width="520" height="240" class="w-full max-w-[480px] h-auto block"></canvas>
+                            </div>
+                            <span class="text-[11px] text-gray-400 mt-2 text-center">
+                                El gráfico cartesiano de la derecha modela el incremento lineal: &Delta;P = &rho; &middot; g &middot; &Delta;h.
+                            </span>
+                        </div>
+
+                        <!-- 3 Tarjetas de Métricas -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase text-gray-400">Presión Hidrostática (P_h)</span>
+                                    <div class="text-lg font-extrabold text-accent font-mono mt-1" id="res-hydro-p-pa">14.038 Pa</div>
+                                </div>
+                                <div class="mt-2 text-[11px] text-gray-500 font-mono border-t border-gray-100 pt-1.5 flex justify-between">
+                                    <span>En mmHg:</span>
+                                    <strong class="text-gray-800" id="res-hydro-p-mmhg">105.3 mmHg</strong>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase text-gray-400">Presión Absoluta Total</span>
+                                    <div class="text-lg font-extrabold text-gray-800 font-mono mt-1" id="res-hydro-p-total">115.363 Pa</div>
+                                </div>
+                                <div class="mt-2 text-[11px] text-gray-500 font-mono border-t border-gray-100 pt-1.5 flex justify-between">
+                                    <span>En atmósferas:</span>
+                                    <strong class="text-gray-800" id="res-hydro-p-atm">1.139 atm</strong>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+                                <div>
+                                    <span class="text-[10px] font-bold uppercase text-gray-400">Fracción de 1 atm</span>
+                                    <div class="text-lg font-extrabold text-amber-700 font-mono mt-1" id="res-hydro-fraction">13.9% de P₀</div>
+                                </div>
+                                <div class="mt-2 text-[11px] text-gray-500 font-mono border-t border-gray-100 pt-1.5 flex justify-between">
+                                    <span>Razón P_h / P₀:</span>
+                                    <strong class="text-gray-800" id="res-hydro-ratio">0.139 : 1</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-accent-light border border-accent/20 p-3.5 rounded-2xl text-xs text-gray-700 space-y-1">
+                            <strong class="text-accent flex items-center gap-1.5"><i class="fa-solid fa-heart-pulse"></i> Relevancia en Kinesiología y Fisioterapia:</strong>
+                            <p class="text-[11px] leading-relaxed text-gray-600">
+                                En bipedestación, la columna de sangre corazón-tobillos añade ~105 mmHg de presión hidrostática en las venas del pie. Para vencer este gradiente gravitacional y evitar el edema en miembros inferiores, el kinesiólogo estimula la <strong>bomba muscular de la pantorrilla (músculo sóleo y gastrocnemios)</strong> durante la marcha y la rehabilitación activa.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 MÓDULO 3: PRINCIPIOS DE PASCAL Y ARQUÍMEDES
+                 ========================================== -->
+            <section id="tab-pascal-arch" class="space-y-6 hidden">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4 mb-4">
+                        <div>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-accent bg-accent-light px-2.5 py-1 rounded-md">Módulo 3</span>
+                            <h2 class="text-xl font-bold text-gray-800 mt-1">Principios Fundamentales: Prensa de Pascal y Flotación de Arquímedes</h2>
+                        </div>
+                        <div class="flex gap-1.5 bg-gray-50 p-1 rounded-xl border border-gray-200 text-xs">
+                            <button onclick="setSubModule3('pascal')" id="subtab-pascal" class="px-3 py-1.5 rounded-lg font-bold bg-accent text-white shadow-xs transition">
+                                Prensa de Pascal
+                            </button>
+                            <button onclick="setSubModule3('archimedes')" id="subtab-archimedes" class="px-3 py-1.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-200 transition">
+                                Empuje de Arquímedes
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        El <strong>Principio de Pascal</strong> establece que la presión aplicada a un fluido incompresible encerrado se transmite íntegramente en todas direcciones (fundamento de la prensa y camillas hidráulicas). El <strong>Principio de Arquímedes</strong> demuestra que todo cuerpo sumergido experimenta un empuje vertical ascensional igual al peso del volumen de fluido desalojado: <strong>E = &rho;_f &middot; g &middot; V_desp</strong> (base de la hidroterapia kinésica).
+                    </p>
+                </div>
+
+                <!-- SUB-VISTA A: PASCAL -->
+                <div id="subview-pascal" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div class="lg:col-span-5 space-y-4 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm text-xs">
+                        <h4 class="font-bold text-gray-800 uppercase flex items-center gap-1.5 text-xs border-b border-gray-100 pb-2">
+                            <i class="fa-solid fa-compress text-accent"></i> Parámetros del Elevador Hidráulico
+                        </h4>
+
+                        <!-- Fuerza F1 -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between font-semibold">
+                                <span class="text-gray-700">Fuerza aplicada en Pistón 1 (F₁):</span>
+                                <span class="text-accent font-mono font-bold" id="val-pascal-f1">250 N</span>
+                            </div>
+                            <input type="range" id="input-pascal-f1" min="10" max="1000" step="10" value="250" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]" oninput="updatePascalSimulator()">
+                            <div class="flex justify-between text-[10px] text-gray-400">
+                                <span>10 N (Fuerza manual leve)</span>
+                                <span>1000 N</span>
+                            </div>
+                        </div>
+
+                        <!-- Área A1 -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between font-semibold">
+                                <span class="text-gray-700">Área Pistón Menor (A₁):</span>
+                                <span class="text-accent font-mono font-bold" id="val-pascal-a1">0.010 m² (100 cm²)</span>
+                            </div>
+                            <input type="range" id="input-pascal-a1" min="0.002" max="0.05" step="0.002" value="0.01" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]" oninput="updatePascalSimulator()">
+                        </div>
+
+                        <!-- Área A2 -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between font-semibold">
+                                <span class="text-gray-700">Área Pistón Mayor (A₂):</span>
+                                <span class="text-accent font-mono font-bold" id="val-pascal-a2">0.200 m² (2000 cm²)</span>
+                            </div>
+                            <input type="range" id="input-pascal-a2" min="0.02" max="0.5" step="0.01" value="0.20" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]" oninput="updatePascalSimulator()">
+                            <div class="flex justify-between text-[10px] text-gray-400">
+                                <span>Factor de multiplicación: <strong id="val-pascal-ratio" class="text-accent">20.0 x</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Carga a levantar -->
+                        <div class="pt-2 border-t border-gray-100">
+                            <label class="block font-bold text-gray-700 mb-1.5">Carga a elevar en Pistón 2:</label>
+                            <div class="grid grid-cols-3 gap-1.5">
+                                <button onclick="setPascalLoad(150)" class="p-2 border border-gray-200 bg-gray-50 hover:bg-gray-100 rounded-xl text-center font-semibold">
+                                    Camilla/Moto<br><span class="text-[10px] text-gray-500">150 kg (~1471 N)</span>
+                                </button>
+                                <button onclick="setPascalLoad(500)" class="p-2 border-2 border-accent bg-accent-light text-accent rounded-xl text-center font-bold">
+                                    Vehículo Ligero<br><span class="text-[10px] text-gray-500">500 kg (~4905 N)</span>
+                                </button>
+                                <button onclick="setPascalLoad(1200)" class="p-2 border border-gray-200 bg-gray-50 hover:bg-gray-100 rounded-xl text-center font-semibold">
+                                    Carga Pesada<br><span class="text-[10px] text-gray-500">1200 kg (~11772 N)</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Canvas y Resultados Pascal -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex flex-col items-center">
+                            <div class="w-full flex justify-between items-center mb-2 text-xs">
+                                <span class="font-bold text-gray-700 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-arrows-up-down text-accent"></i> Diagrama Hidráulico de Transmisión de Presión
+                                </span>
+                                <span id="pascal-lift-status" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                    Carga Elevada Exitosamente
+                                </span>
+                            </div>
+                            <div class="w-full relative rounded-xl border border-gray-200 overflow-hidden canvas-bg p-2 flex justify-center">
+                                <canvas id="canvas-pascal" width="520" height="240" class="w-full max-w-[480px] h-auto block"></canvas>
+                            </div>
+                            <span class="text-[11px] text-gray-400 mt-2 text-center">
+                                Presión homogénea en todo el fluido: P₁ = P₂. Conservación del trabajo: W = F₁ &middot; &Delta;x₁ = F₂ &middot; &Delta;x₂.
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+                                <span class="text-[10px] font-bold uppercase text-gray-400">Presión Confinada (P)</span>
+                                <div class="text-lg font-extrabold text-accent font-mono mt-1" id="res-pascal-p">25.000 Pa</div>
+                                <div class="text-[10px] text-gray-500 mt-1 font-mono">P = F₁ / A₁</div>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+                                <span class="text-[10px] font-bold uppercase text-gray-400">Fuerza Resultante (F₂)</span>
+                                <div class="text-lg font-extrabold text-emerald-700 font-mono mt-1" id="res-pascal-f2">5.000 N</div>
+                                <div class="text-[10px] text-gray-500 mt-1 font-mono">F₂ = P &middot; A₂</div>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+                                <span class="text-[10px] font-bold uppercase text-gray-400">Masa Máxima Elevable</span>
+                                <div class="text-lg font-extrabold text-gray-800 font-mono mt-1" id="res-pascal-max-mass">509.7 kg</div>
+                                <div class="text-[10px] text-gray-500 mt-1 font-mono">m = F₂ / 9.81</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-VISTA B: ARQUÍMEDES -->
+                <div id="subview-archimedes" class="grid grid-cols-1 lg:grid-cols-12 gap-6 hidden">
+                    <div class="lg:col-span-5 space-y-4 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm text-xs">
+                        <h4 class="font-bold text-gray-800 uppercase flex items-center gap-1.5 text-xs border-b border-gray-100 pb-2">
+                            <i class="fa-solid fa-water-ladder text-accent"></i> Parámetros de Empuje y Densidad
+                        </h4>
+
+                        <!-- Líquido contenedor -->
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1">Líquido de inmersión (&rho;_f):</label>
+                            <select id="sel-arch-fluid" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800 outline-none focus-accent" onchange="updateArchimedesSimulator()">
+                                <option value="1000" selected>Agua Dulce (Piscina Kinésica: &rho;_f = 1000 kg/m³)</option>
+                                <option value="1025">Agua de Mar / Salina (&rho;_f = 1025 kg/m³)</option>
+                                <option value="1260">Glicerina (&rho;_f = 1260 kg/m³)</option>
+                                <option value="800">Aceite (&rho;_f = 800 kg/m³)</option>
+                            </select>
+                        </div>
+
+                        <!-- Material del cuerpo sólido -->
+                        <div>
+                            <label class="block font-bold text-gray-700 mb-1.5">Material del Cuerpo Sólido:</label>
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <button onclick="setArchBody('wood')" id="arch-mat-wood" class="p-2 border-2 border-accent bg-accent-light text-accent rounded-xl font-bold text-left">
+                                    Madera (600 kg/m³)<br><span class="text-[10px] font-normal text-gray-600">Flota libremente</span>
+                                </button>
+                                <button onclick="setArchBody('human')" id="arch-mat-human" class="p-2 border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl font-semibold text-left">
+                                    Cuerpo Humano (980 kg/m³)<br><span class="text-[10px] font-normal text-gray-500">Flota 98% sumergido</span>
+                                </button>
+                                <button onclick="setArchBody('neutral')" id="arch-mat-neutral" class="p-2 border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl font-semibold text-left">
+                                    Neutro (1000 kg/m³)<br><span class="text-[10px] font-normal text-gray-500">Suspensión perfecta</span>
+                                </button>
+                                <button onclick="setArchBody('iron')" id="arch-mat-iron" class="p-2 border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl font-semibold text-left">
+                                    Metal / Plomo (7800 kg/m³)<br><span class="text-[10px] font-normal text-gray-500">Se hunde al fondo</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Volumen del cuerpo -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between font-semibold">
+                                <span class="text-gray-700">Volumen Total del Cuerpo (V_c):</span>
+                                <span class="text-accent font-mono font-bold" id="val-arch-vol">0.020 m³ (20 L)</span>
+                            </div>
+                            <input type="range" id="input-arch-vol" min="0.005" max="0.08" step="0.005" value="0.020" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]" oninput="updateArchimedesSimulator()">
+                        </div>
+
+                        <!-- Densidad personalizada -->
+                        <div class="space-y-1">
+                            <div class="flex justify-between font-semibold">
+                                <span class="text-gray-700">Densidad del Cuerpo (&rho;_c):</span>
+                                <span class="text-accent font-mono font-bold" id="val-arch-density">600 kg/m³</span>
+                            </div>
+                            <input type="range" id="input-arch-density" min="100" max="2500" step="50" value="600" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]" oninput="updateArchimedesSimulator()">
+                        </div>
+                    </div>
+
+                    <!-- Canvas y Resultados Arquímedes -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex flex-col items-center">
+                            <div class="w-full flex justify-between items-center mb-2 text-xs">
+                                <span class="font-bold text-gray-700 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-ship text-accent"></i> Tanque de Inmersión y Vectores de Fuerza en Tiempo Real
+                                </span>
+                                <span id="arch-equilibrium-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                                    Flotación Parcial en Equilibrio (E = P)
+                                </span>
+                            </div>
+                            <div class="w-full relative rounded-xl border border-gray-200 overflow-hidden canvas-bg p-2 flex justify-center">
+                                <canvas id="canvas-archimedes" width="520" height="240" class="w-full max-w-[480px] h-auto block"></canvas>
+                            </div>
+                            <div class="w-full flex justify-between text-[11px] text-gray-500 mt-2 px-1">
+                                <span class="text-emerald-700 font-bold"><i class="fa-solid fa-arrow-up mr-1"></i> Vector Verde: Empuje Hidrostático (E)</span>
+                                <span class="text-rose-600 font-bold"><i class="fa-solid fa-arrow-down mr-1"></i> Vector Rojo: Peso Propio (P)</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+                                <span class="text-[10px] font-bold uppercase text-gray-400">Peso Real del Cuerpo (P)</span>
+                                <div class="text-lg font-extrabold text-rose-600 font-mono mt-1" id="res-arch-weight">117.7 N</div>
+                                <div class="text-[10px] text-gray-500 mt-1 font-mono">P = &rho;_c &middot; V_c &middot; g</div>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+                                <span class="text-[10px] font-bold uppercase text-gray-400">Empuje Hidrostático (E)</span>
+                                <div class="text-lg font-extrabold text-emerald-700 font-mono mt-1" id="res-arch-buoyancy">117.7 N</div>
+                                <div class="text-[10px] text-gray-500 mt-1 font-mono">E = &rho;_f &middot; g &middot; V_sumergido</div>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm">
+                                <span class="text-[10px] font-bold uppercase text-gray-400">% Volumen Sumergido</span>
+                                <div class="text-lg font-extrabold text-accent font-mono mt-1" id="res-arch-submerged-pct">60.0%</div>
+                                <div class="text-[10px] text-gray-500 mt-1 font-mono">% = (&rho;_c / &rho;_f) &middot; 100</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-accent-light border border-accent/20 p-3.5 rounded-2xl text-xs text-gray-700 space-y-1">
+                            <strong class="text-accent flex items-center gap-1.5"><i class="fa-solid fa-person-swimming"></i> Aplicación en Hidroterapia Kinésica:</strong>
+                            <p class="text-[11px] leading-relaxed text-gray-600">
+                                En una piscina terapéutica, el empuje de Arquímedes contrarresta hasta un 90% del peso corporal cuando el agua llega a nivel axilar, permitiendo la <strong>descarga articular precoz</strong> en pacientes con artrosis severa, postoperatorios de cadera o lesiones de ligamentos cruzados.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 MÓDULO 4: FLUIDOS CORPORALES & BIOMECÁNICA
+                 ========================================== -->
+            <section id="tab-bio" class="space-y-6 hidden">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4 mb-4">
+                        <div>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-accent bg-accent-light px-2.5 py-1 rounded-md">Módulo 4</span>
+                            <h2 class="text-xl font-bold text-gray-800 mt-1">Presiones en Compartimientos y Fluidos Corporales</h2>
+                        </div>
+                        <div class="text-xs text-gray-500 max-w-xs">
+                            Presión arterial, pulmonar/pleural, intraocular (PIO) y cavidad sinovial.
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        El organismo humano opera como un complejo sistema hidráulico y neumático. Las leyes de la hidrostática y la física de gases rigen los gradientes de perfusión arterial, el retroceso elástico pulmonar, la turgencia ocular y la coaptación articular.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Selector de Compartimientos -->
+                    <div class="lg:col-span-5 space-y-3 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm text-xs">
+                        <h4 class="font-bold text-gray-800 uppercase flex items-center gap-1.5 text-xs border-b border-gray-100 pb-2">
+                            <i class="fa-solid fa-person text-accent"></i> Selecciona Compartimiento Anatómico
+                        </h4>
+
+                        <!-- 1. Sistema Arterial -->
+                        <button onclick="selectBioSystem('arterial')" id="bio-btn-arterial" class="w-full text-left p-3 rounded-xl border-2 border-accent bg-accent-light text-accent transition flex items-center justify-between shadow-xs">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-accent text-white flex items-center justify-center font-bold text-sm">
+                                    <i class="fa-solid fa-heart-pulse"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-gray-800 text-xs">Presión Arterial Sistémica</h5>
+                                    <p class="text-[10px] text-gray-500">Gradiente ventricular, sístole/diástole</p>
+                                </div>
+                            </div>
+                            <span class="font-mono font-bold text-accent text-xs">120/80 mmHg</span>
+                        </button>
+
+                        <!-- 2. Presión Pleural Pulmonar -->
+                        <button onclick="selectBioSystem('pulmonary')" id="bio-btn-pulmonary" class="w-full text-left p-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-sm">
+                                    <i class="fa-solid fa-lungs"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-gray-800 text-xs">Presión Intrapleural y Pulmonar</h5>
+                                    <p class="text-[10px] text-gray-500">Presión negativa subatmosférica</p>
+                                </div>
+                            </div>
+                            <span class="font-mono font-bold text-sky-700 text-xs">-5 a -8 cmH₂O</span>
+                        </button>
+
+                        <!-- 3. Presión Intraocular -->
+                        <button onclick="selectBioSystem('ocular')" id="bio-btn-ocular" class="w-full text-left p-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-amber-600 text-white flex items-center justify-center font-bold text-sm">
+                                    <i class="fa-solid fa-eye"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-gray-800 text-xs">Presión Intraocular (PIO)</h5>
+                                    <p class="text-[10px] text-gray-500">Dinámica del humor acuoso</p>
+                                </div>
+                            </div>
+                            <span class="font-mono font-bold text-amber-700 text-xs">10 - 21 mmHg</span>
+                        </button>
+
+                        <!-- 4. LCR y Sinovial -->
+                        <button onclick="selectBioSystem('cavities')" id="bio-btn-cavities" class="w-full text-left p-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition flex items-center justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-lg bg-purple-700 text-white flex items-center justify-center font-bold text-sm">
+                                    <i class="fa-solid fa-brain"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-gray-800 text-xs">LCR y Cavidad Sinovial</h5>
+                                    <p class="text-[10px] text-gray-500">Amortiguación y coaptación articular</p>
+                                </div>
+                            </div>
+                            <span class="font-mono font-bold text-purple-700 text-xs">LCR: 7-15 mmHg</span>
+                        </button>
+
+                        <!-- Control deslizante fisiológico -->
+                        <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-2 pt-2">
+                            <div class="flex justify-between font-semibold">
+                                <span id="bio-param-label" class="text-gray-700">Fase Cardíaca / Tensión:</span>
+                                <span id="bio-param-val" class="text-accent font-mono font-bold">Sístole (120 mmHg)</span>
+                            </div>
+                            <input type="range" id="bio-param-slider" min="0" max="100" value="70" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#436600]" oninput="updateBioSimulator()">
+                            <div class="flex justify-between text-[10px] text-gray-400" id="bio-slider-extremes">
+                                <span>Diástole (80 mmHg)</span>
+                                <span>Sístole (120 mmHg)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Canvas y Ficha de Fisiología Cuantitativa -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex flex-col items-center">
+                            <div class="w-full flex justify-between items-center mb-2 text-xs">
+                                <span class="font-bold text-gray-700 flex items-center gap-1.5" id="bio-canvas-title">
+                                    <i class="fa-solid fa-heart-pulse text-accent"></i> Hemodinámica Arterial: Curva de Presión Pulsátil
+                                </span>
+                                <span id="bio-clinical-status" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                    Rango Normotensivo
+                                </span>
+                            </div>
+                            <div class="w-full relative rounded-xl border border-gray-200 overflow-hidden canvas-bg p-2 flex justify-center">
+                                <canvas id="canvas-bio" width="520" height="240" class="w-full max-w-[480px] h-auto block"></canvas>
+                            </div>
+                            <div class="w-full flex justify-between text-[11px] text-gray-500 mt-2 px-1">
+                                <span>Equivalencia clínica: 1 mmHg = 133.32 Pa</span>
+                                <span class="font-mono font-bold text-gray-700" id="bio-pascal-equiv">120 mmHg = 15.998 Pa</span>
+                            </div>
+                        </div>
+
+                        <!-- Ficha de Análisis Fisicoquímico -->
+                        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-3 text-xs">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h4 class="text-sm font-bold text-gray-800" id="bio-card-heading">Análisis Fisicoquímico: Presión Arterial</h4>
+                                    <p class="text-gray-500 text-[11px]" id="bio-card-subheading">Presión hidrostática pulsátil generada por la eyección ventricular</p>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-accent-light text-accent border border-accent/20" id="bio-card-units">mmHg / kPa</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 font-mono text-xs" id="bio-card-metrics">
+                                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                                    <span class="text-gray-400 text-[10px] block">Presión Sistólica</span>
+                                    <span class="text-rose-700 font-bold text-sm">120 mmHg (16.0 kPa)</span>
+                                </div>
+                                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                                    <span class="text-gray-400 text-[10px] block">Presión Diastólica</span>
+                                    <span class="text-blue-700 font-bold text-sm">80 mmHg (10.7 kPa)</span>
+                                </div>
+                                <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                                    <span class="text-gray-400 text-[10px] block">Presión Arterial Media</span>
+                                    <span class="text-emerald-700 font-bold text-sm">93.3 mmHg (12.4 kPa)</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-accent-light rounded-xl border border-accent/20 text-gray-700 text-[11px] leading-relaxed" id="bio-card-explanation">
+                                <strong>Mecanismo Biofísico:</strong> La contracción ventricular izquierda impulsa la sangre contra las paredes elásticas de la aorta. Durante la diástole, el retroceso elástico vascular (efecto Windkessel) amortigua la caída de presión, asegurando perfusión capilar constante.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 MÓDULO 5: CASOS CLÍNICOS & BIOFÍSICA KINÉSICA
+                 ========================================== -->
+            <section id="tab-casos" class="space-y-6 hidden">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4 mb-4">
+                        <div>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-accent bg-accent-light px-2.5 py-1 rounded-md">Módulo 5</span>
+                            <h2 class="text-xl font-bold text-gray-800 mt-1">Casos Clínicos: Razonamiento Biofísico y Kinesiológico</h2>
+                        </div>
+                        <div class="text-xs text-gray-500 max-w-xs">
+                            Aplicación práctica en hidroterapia, hemodinámica venosa y kinesiología respiratoria.
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Analizá las siguientes situaciones clínicas del ámbito kinesiológico aplicando los fundamentos de la mecánica de fluidos, la presión hidrostática, el empuje de Arquímedes y la ley de Boyle:
+                    </p>
+                </div>
+
+                <div class="space-y-4 text-xs">
+                    <!-- Caso 1 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-accent text-sm">Caso 1: Descarga Articular en Hidroterapia (Piscina Kinésica)</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 bg-accent-light text-accent rounded-full border border-accent/20">Principio de Arquímedes</span>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">
+                            Un paciente deportista en rehabilitación tras una reconstrucción de ligamento cruzado anterior (LCA) inicia sesiones de marcha en piscina terapéutica con inmersión hasta el nivel xifoideo (pecho):
+                        </p>
+                        <strong class="block text-gray-800">¿Cuál es el beneficio biofísico del agua y qué porcentaje aproximado del peso corporal soportan sus rodillas?</strong>
+                        <div class="space-y-2 pt-1">
+                            <button onclick="checkCaseFQ(1, 'A')" class="w-full p-2.5 rounded-xl border border-gray-200 hover:border-accent text-left transition bg-gray-50">
+                                A) El empuje vertical ascensional de Arquímedes contrarresta cerca del 70% al 75% del peso corporal, reduciendo drásticamente el impacto articular y permitiendo reeducar el patrón de marcha sin sobrecargar el injerto.
+                            </button>
+                            <button onclick="checkCaseFQ(1, 'B')" class="w-full p-2.5 rounded-xl border border-gray-200 hover:border-accent text-left transition bg-gray-50">
+                                B) La presión hidrostática aumenta el peso aparente del paciente, forzando a los cuádriceps a soportar el doble de su carga gravitatoria en tierra.
+                            </button>
+                        </div>
+                        <div id="feedback-fq-1" class="hidden mt-2 p-3 rounded-xl text-xs leading-relaxed"></div>
+                    </div>
+
+                    <!-- Caso 2 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-accent text-sm">Caso 2: Gradiente Hidrostático y Retorno Venoso en Bipedestación</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 bg-accent-light text-accent rounded-full border border-accent/20">Presión Hidrostática</span>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">
+                            Una persona permanece de pie inmóvil durante 6 horas en su jornada laboral y desarrolla pesadez y edema en los tobillos al final del día:
+                        </p>
+                        <strong class="block text-gray-800">¿Qué fenómeno hidrostático explica este cuadro y cómo actúa la kinesiterapia de activación muscular?</strong>
+                        <div class="space-y-2 pt-1">
+                            <button onclick="checkCaseFQ(2, 'A')" class="w-full p-2.5 rounded-xl border border-gray-200 hover:border-accent text-left transition bg-gray-50">
+                                A) La columna hidrostática de 1.35 m genera más de 105 mmHg adicionales en las venas distales; las contracciones rítmicas del tríceps sural actúan como una bomba muscular de compresión (Principio de Pascal) que propulsa la sangre hacia el corazón contra la gravedad.
+                            </button>
+                            <button onclick="checkCaseFQ(2, 'B')" class="w-full p-2.5 rounded-xl border border-gray-200 hover:border-accent text-left transition bg-gray-50">
+                                B) La sangre pierde su densidad volviéndose gas, lo que bloquea por completo las válvulas venosas unidireccionales.
+                            </button>
+                        </div>
+                        <div id="feedback-fq-2" class="hidden mt-2 p-3 rounded-xl text-xs leading-relaxed"></div>
+                    </div>
+
+                    <!-- Caso 3 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-accent text-sm">Caso 3: Presión Negativa Intrapleural y Kinesiología Respiratoria</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 bg-accent-light text-accent rounded-full border border-accent/20">Ley de Boyle</span>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">
+                            Durante una sesión de reeducación diafragmática, el kinesiólogo guía al paciente en una inspiración diafragmática profunda y lenta:
+                        </p>
+                        <strong class="block text-gray-800">¿Cómo varía la presión en la cavidad intrapleural y qué efecto biofísico genera en el parénquima pulmonar?</strong>
+                        <div class="space-y-2 pt-1">
+                            <button onclick="checkCaseFQ(3, 'A')" class="w-full p-2.5 rounded-xl border border-gray-200 hover:border-accent text-left transition bg-gray-50">
+                                A) Al descender el diafragma aumenta el volumen torácico, volviendo la presión intrapleural más subatmosférica (-8 cmH₂O); este gradiente transmural succiona y distiende los alvéolos facilitando la ventilación colateral.
+                            </button>
+                            <button onclick="checkCaseFQ(3, 'B')" class="w-full p-2.5 rounded-xl border border-gray-200 hover:border-accent text-left transition bg-gray-50">
+                                B) La presión intrapleural sube a +50 mmHg para expulsar con violencia el aire residual hacia la tráquea.
+                            </button>
+                        </div>
+                        <div id="feedback-fq-3" class="hidden mt-2 p-3 rounded-xl text-xs leading-relaxed"></div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Modal: Guía de Uso del Simulador y Orientación Pedagógica -->
+    <div id="modal-tutorial" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white max-w-3xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-accent p-4 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-xl"></i>
+                    <h3 class="font-bold text-base">Guía de Uso del Simulador y Orientación Pedagógica</h3>
+                </div>
+                <button onclick="closeTutorial()" class="text-white hover:text-gray-200 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto space-y-5 text-xs md:text-sm text-gray-600 custom-scroll leading-relaxed">
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1 text-accent flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye"></i> 1. Propósito Tecnopedagógico
+                    </h4>
+                    <p>
+                        Este simulador interactivo está desarrollado especialmente para estudiantes ingresantes a la <strong>Licenciatura en Kinesiología y Fisiatría (Facultad de Ciencias Médicas - Universidad Católica de Cuyo)</strong>. Su objetivo es integrar la comprensión de la <strong>mecánica de fluidos</strong>, la <strong>presión hidrostática y atmosférica</strong>, los <strong>principios de Pascal y Arquímedes</strong> con la hemodinámica cardiovascular, la biomecánica ventilatoria y la hidroterapia clínica.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-2 text-accent flex items-center gap-2">
+                        <i class="fa-solid fa-compass"></i> 2. Guía Detallada de Módulos y Herramientas Interactivas
+                    </h4>
+                    
+                    <div class="space-y-3.5">
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-1.5">
+                            <span class="font-bold text-gray-800 text-xs text-accent flex items-center gap-1.5">
+                                <i class="fa-solid fa-atom"></i> Módulo 1: Propiedades de los Fluidos (Densidad, Presión y Peso Específico)
+                            </span>
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                • <strong>Laboratorio Cuantitativo:</strong> Experimentá con los deslizadores continuos de masa (0.1 a 50 kg), volumen (0.1 a 20 L) y superficie basal (50 a 5000 cm²).<br>
+                                • <strong>Sustancias Preconfiguradas:</strong> Alterná entre <em>Agua pura</em> (1000 kg/m³), <em>Sangre humana</em> (1060 kg/m³), <em>Mercurio Hg</em> (13600 kg/m³), <em>Aceite vegetal</em> (920 kg/m³) y <em>Aire</em> (1.20 kg/m³).<br>
+                                • <strong>Dashboard Dinámico:</strong> Conversión simultánea de densidad en SI (kg/m³) y CGS (g/cm³), cálculo de peso específico (&gamma; = &rho; &middot; g en N/m³) y presión superficial en Pascales (P = F/A).
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-1.5">
+                            <span class="font-bold text-gray-800 text-xs text-accent flex items-center gap-1.5">
+                                <i class="fa-solid fa-water"></i> Módulo 2: Presión Hidrostática, Atmosférica y Columna Corporal
+                            </span>
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                • <strong>Teorema Fundamental de la Hidrostática:</strong> Modificá la profundidad de inmersión (0 a 10 m) y el fluido contenedor observando el gradiente manométrico lineal &Delta;P = &rho; &middot; g &middot; &Delta;h en la gráfica cartesiana P(h).<br>
+                                • <strong>Presión Atmosférica Conmutable:</strong> Activá o desactivá la presión superficial P₀ (101.325 Pa = 1 atm) para comparar presiones relativas manométricas vs absolutas totales.<br>
+                                • <strong>Presets Didácticos y Clínicos:</strong> Explorá escenarios inmediatos: <em>Corazón a Pies</em> (h = 1.35 m en sangre &rarr; sobrepresión de +105.3 mmHg), <em>Corazón a Cerebro</em> (h = 0.35 m), <em>Buceo a 10 metros</em> (duplicación a ~2 atm) y <em>Barómetro de Torricelli</em> (760 mmHg &equiv; 1 atm).
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-1.5">
+                            <span class="font-bold text-gray-800 text-xs text-accent flex items-center gap-1.5">
+                                <i class="fa-solid fa-arrows-up-down"></i> Módulo 3: Principios Fundamentales (Pascal & Arquímedes)
+                            </span>
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                • <strong>Sub-pestaña Prensa Hidráulica (Pascal):</strong> Configurá la fuerza de entrada F₁, el área del pistón menor A₁ y del pistón mayor A₂ para comprobar la multiplicación de fuerza (F₂ = F₁ &middot; A₂/A₁) y elevar cargas de 150 kg, 500 kg o 1200 kg comprobando la conservación del trabajo mecánico.<br>
+                                • <strong>Sub-pestaña Flotabilidad (Arquímedes):</strong> Modificá el fluido de inmersión y seleccioná materiales como <em>Madera</em>, <em>Cuerpo Humano</em> (980 kg/m³), <em>Cuerpo Neutro</em> o <em>Metal</em>. El canvas dibuja en tiempo real los vectores en equilibrio del peso gravitatorio (P, rojo) y el empuje vertical ascensional (E = &rho;_f &middot; g &middot; V_sumergido, verde), calculando el porcentaje exacto de volumen sumergido.
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-1.5">
+                            <span class="font-bold text-gray-800 text-xs text-accent flex items-center gap-1.5">
+                                <i class="fa-solid fa-heart-pulse"></i> Módulo 4: Fluidos Corporales y Compartimientos Biomecánicos
+                            </span>
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                • <strong>Presión Arterial Sistémica:</strong> Visualización de la curva pulsátil sistólica/diastólica (120/80 mmHg &approx; 16.0/10.7 kPa) con amortiguación elástica parietal (efecto Windkessel).<br>
+                                • <strong>Mecánica Ventilatoria Pulmonar:</strong> Aplicación de la Ley de Boyle en la presión intrapleural subatmosférica (-5 a -8 cmH₂O) para la distensión alveolar.<br>
+                                • <strong>Presión Intraocular (PIO):</strong> Regulación hidrostática por humor acuoso (10 a 21 mmHg) y prevención del glaucoma.<br>
+                                • <strong>LCR y Cavidad Sinovial:</strong> Efecto boyante del líquido cefalorraquídeo (&rho; = 1007 kg/m³) que reduce el peso encefálico de 1400 g a sólo 50 g y presión negativa de coaptación articular.
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-1.5">
+                            <span class="font-bold text-gray-800 text-xs text-accent flex items-center gap-1.5">
+                                <i class="fa-solid fa-stethoscope"></i> Módulo 5: Casos Clínicos y Razonamiento Biofísico
+                            </span>
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                • <strong>Casos Fisiátricos Aplicados:</strong> Tres situaciones clínicas interactivas sobre descarga articular en piscina terapéutica (Arquímedes), retorno venoso y bomba muscular de la pantorrilla (Pascal e hidrostática), y reeducación diafragmática (Ley de Boyle), con retroalimentación formativa inmediata paso a paso.
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-1.5">
+                            <span class="font-bold text-gray-800 text-xs text-accent flex items-center gap-1.5">
+                                <i class="fa-solid fa-book-bookmark"></i> Botón Formulario (Barra Superior)
+                            </span>
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                • Accedé en cualquier momento al <strong>Compendio Teórico y Fórmulas Fundamentales</strong> para consultar equivalencias de unidades clínicas (mmHg, cmH₂O, Pa, atm, kg/m³) y ecuaciones de hidrostática.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-gray-800 text-sm mb-1 text-accent flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb"></i> 3. Navegación Libre y Aprendizaje Autónomo
+                    </h4>
+                    <p>
+                        El simulador sigue el estándar formativo universitario de la UCCuyo: sin penalizaciones punitivas, restricciones ni cronómetros. Podés alternar libremente entre pestañas y experimentar con los modelos interactivos cuantas veces lo requieras para consolidar tu aprendizaje.
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-end">
+                <button onclick="closeTutorial()" class="px-4 py-2 bg-accent text-white rounded-xl text-xs font-semibold hover:bg-accent-hover transition">
+                    Entendido, comenzar exploración
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Formulario y Compendio Científico -->
+    <div id="modal-formulas" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white max-w-2xl w-full rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-accent p-4 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-book-bookmark text-xl"></i>
+                    <h3 class="font-bold text-base">Compendio Teórico y Fórmulas Fundamentales</h3>
+                </div>
+                <button onclick="closeFormulasModal()" class="text-white hover:text-gray-200 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto space-y-4 text-xs text-gray-700 custom-scroll leading-relaxed">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono">
+                    <div class="p-3 rounded-xl bg-gray-50 border border-gray-200">
+                        <h4 class="font-bold text-accent text-xs uppercase mb-1 font-sans">1. Densidad y Presión</h4>
+                        <ul class="space-y-1 text-[11px]">
+                            <li>&rho; = m / V &nbsp; [kg/m³ o g/cm³]</li>
+                            <li>P = F / A &nbsp; [Pa = N/m²]</li>
+                            <li>&gamma; = P / V = &rho; &middot; g &nbsp; [N/m³]</li>
+                        </ul>
+                    </div>
+                    <div class="p-3 rounded-xl bg-gray-50 border border-gray-200">
+                        <h4 class="font-bold text-accent text-xs uppercase mb-1 font-sans">2. Presión Hidrostática</h4>
+                        <ul class="space-y-1 text-[11px]">
+                            <li>P_h = &rho; &middot; g &middot; h</li>
+                            <li>P_total = P₀ + &rho; &middot; g &middot; h</li>
+                            <li>1 atm = 101.325 Pa = 760 mmHg</li>
+                        </ul>
+                    </div>
+                    <div class="p-3 rounded-xl bg-gray-50 border border-gray-200">
+                        <h4 class="font-bold text-accent text-xs uppercase mb-1 font-sans">3. Principio de Pascal</h4>
+                        <ul class="space-y-1 text-[11px]">
+                            <li>P₁ = P₂ &hArr; F₁ / A₁ = F₂ / A₂</li>
+                            <li>F₂ = F₁ &middot; (A₂ / A₁)</li>
+                            <li>W = F₁ &middot; &Delta;x₁ = F₂ &middot; &Delta;x₂</li>
+                        </ul>
+                    </div>
+                    <div class="p-3 rounded-xl bg-gray-50 border border-gray-200">
+                        <h4 class="font-bold text-accent text-xs uppercase mb-1 font-sans">4. Principio de Arquímedes</h4>
+                        <ul class="space-y-1 text-[11px]">
+                            <li>E = &rho;_f &middot; g &middot; V_desp</li>
+                            <li>% V_sumergido = (&rho;_cuerpo / &rho;_fluido) &middot; 100</li>
+                            <li>Equilibrio: E = P (Flotación)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-accent-light border border-accent/20 text-gray-800">
+                    <h4 class="font-bold text-accent text-xs uppercase mb-1">5. Constantes y Conversiones Fisiológicas</h4>
+                    <p class="text-[11px] leading-relaxed">
+                        • <strong>1 mmHg:</strong> = 133.322 Pa &nbsp;|&nbsp; <strong>1 cmH₂O:</strong> = 98.0665 Pa<br>
+                        • <strong>Presión Arterial:</strong> 120/80 mmHg &approx; 16.0 / 10.7 kPa<br>
+                        • <strong>Presión Intrapleural:</strong> -5 a -8 cmH₂O (subatmosférica)<br>
+                        • <strong>Presión Intraocular (PIO):</strong> 10 a 21 mmHg (1.33 a 2.80 kPa)
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-end">
+                <button onclick="closeFormulasModal()" class="px-4 py-2 bg-accent text-white rounded-xl text-xs font-semibold hover:bg-accent-hover transition">
+                    Cerrar Formulario
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pie de Página Institucional -->
+    <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500 mt-12">
+        <p>Desarrollado por vesalio - Todos los derechos reservados</p>
+    </footer>
+
+    <!-- Lógica de la Aplicación en JavaScript -->
+    <script>
+        const appState = {
+            activeTab: 'tab-props',
+            subMod3: 'pascal',
+
+            // Módulo 1: Propiedades
+            substance: 'water',
+            mass: 5.0, // kg
+            volume: 5.0, // Litros
+            area: 0.05, // m²
+            g: 9.81,
+
+            // Módulo 2: Hidrostática
+            hydroDensity: 1060, // kg/m³
+            hydroDepth: 1.35, // m
+            hydroAtm: true,
+            p0: 101325, // Pa
+
+            // Módulo 3: Pascal
+            pascalF1: 250, // N
+            pascalA1: 0.01, // m²
+            pascalA2: 0.20, // m²
+            pascalLoadMass: 500, // kg
+
+            // Módulo 3: Arquímedes
+            archFluidDensity: 1000,
+            archBodyDensity: 600,
+            archBodyVolume: 0.020, // m³
+
+            // Módulo 4: Fluidos Corporales
+            bioSystem: 'arterial',
+            bioSliderValue: 70
+        };
+
+        function openTutorial() {
+            document.getElementById('modal-tutorial').classList.remove('hidden');
+        }
+
+        function closeTutorial() {
+            document.getElementById('modal-tutorial').classList.add('hidden');
+        }
+
+        function openFormulasModal() {
+            document.getElementById('modal-formulas').classList.remove('hidden');
+        }
+
+        function closeFormulasModal() {
+            document.getElementById('modal-formulas').classList.add('hidden');
+        }
+
+        function switchTab(tabId) {
+            appState.activeTab = tabId;
+            const tabs = ['tab-props', 'tab-hydro', 'tab-pascal-arch', 'tab-bio', 'tab-casos'];
+            const buttons = ['btn-tab-props', 'btn-tab-hydro', 'btn-tab-pascal-arch', 'btn-tab-bio', 'btn-tab-casos'];
+
+            tabs.forEach(t => {
+                const el = document.getElementById(t);
+                if (el) el.classList.add('hidden');
+            });
+
+            buttons.forEach(b => {
+                const btn = document.getElementById(b);
+                if (btn) {
+                    btn.className = 'text-gray-700 hover:bg-gray-100 flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-medium transition';
+                }
+            });
+
+            const activeSection = document.getElementById(tabId);
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+
+            if (activeSection) activeSection.classList.remove('hidden');
+            if (activeBtn) {
+                activeBtn.className = 'bg-accent text-white flex-1 lg:flex-none text-left py-2.5 px-4 rounded-xl text-sm font-semibold transition shadow-sm';
+            }
+
+            requestAnimationFrame(() => {
+                if (tabId === 'tab-props') drawPropsCanvas();
+                if (tabId === 'tab-hydro') drawHydroCanvas();
+                if (tabId === 'tab-pascal-arch') {
+                    if (appState.subMod3 === 'pascal') drawPascalCanvas();
+                    else drawArchimedesCanvas();
+                }
+                if (tabId === 'tab-bio') drawBioCanvas();
+            });
+        }
+
+        /* ========================================================================= */
+        /* MÓDULO 1: PROPIEDADES DE FLUIDOS                                          */
+        /* ========================================================================= */
+        function setSubstance(sub) {
+            appState.substance = sub;
+            const substances = {
+                water: { rho: 1000 },
+                blood: { rho: 1060 },
+                mercury: { rho: 13600 },
+                oil: { rho: 920 },
+                air: { rho: 1.2 }
+            };
+
+            const selected = substances[sub];
+            const volM3 = appState.volume / 1000.0;
+            appState.mass = parseFloat((selected.rho * volM3).toFixed(2));
+            
+            const massInput = document.getElementById('input-mass');
+            if (massInput) massInput.value = Math.min(50, appState.mass);
+
+            ['water', 'blood', 'mercury', 'oil', 'air'].forEach(s => {
+                const btn = document.getElementById(`sub-${s}`);
+                if (btn) {
+                    if (s === sub) {
+                        btn.className = "p-2 rounded-xl font-bold border-2 border-accent bg-accent-light text-accent text-center transition";
+                    } else {
+                        btn.className = "p-2 rounded-xl font-semibold border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 text-center transition";
+                    }
+                }
+            });
+
+            updatePropSimulator();
+        }
+
+        function updatePropSimulator() {
+            const massInput = document.getElementById('input-mass');
+            const volInput = document.getElementById('input-vol');
+            const areaInput = document.getElementById('input-area');
+
+            appState.mass = parseFloat(massInput.value);
+            appState.volume = parseFloat(volInput.value);
+            appState.area = parseFloat(areaInput.value);
+
+            const volM3 = appState.volume / 1000.0;
+            const density = appState.mass / volM3;
+            const densityCgs = density / 1000.0;
+            const specificWeight = density * appState.g;
+            const normalForce = appState.mass * appState.g;
+            const surfacePressure = normalForce / appState.area;
+
+            document.getElementById('val-mass').innerText = `${appState.mass.toFixed(2)} kg`;
+            document.getElementById('val-vol').innerText = `${appState.volume.toFixed(2)} L (${volM3.toFixed(4)} m³)`;
+            document.getElementById('val-area').innerText = `${appState.area.toFixed(3)} m² (${(appState.area * 10000).toFixed(0)} cm²)`;
+
+            document.getElementById('res-density-si').innerText = `${density.toFixed(1)} kg/m³`;
+            document.getElementById('res-density-cgs').innerText = `${densityCgs.toFixed(3)} g/cm³`;
+            document.getElementById('res-specific-weight').innerText = `${specificWeight.toFixed(0)} N/m³`;
+            document.getElementById('res-surface-pressure').innerText = `${surfacePressure.toFixed(1)} Pa`;
+            document.getElementById('res-normal-force').innerText = `${normalForce.toFixed(2)} N`;
+
+            drawPropsCanvas();
+        }
+
+        function drawPropsCanvas() {
+            const canvas = document.getElementById('canvas-props');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Mesa de laboratorio
+            ctx.fillStyle = "#e2e8f0";
+            ctx.fillRect(40, h - 35, w - 80, 20);
+            ctx.fillStyle = "#94a3b8";
+            ctx.fillRect(40, h - 15, w - 80, 4);
+
+            // Probeta cilíndrica
+            const beakerX = 140;
+            const beakerW = 95;
+            const beakerH = 165;
+            const beakerY = h - 35 - beakerH;
+
+            ctx.strokeStyle = "#436600";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(beakerX, beakerY);
+            ctx.lineTo(beakerX, beakerY + beakerH);
+            ctx.lineTo(beakerX + beakerW, beakerY + beakerH);
+            ctx.lineTo(beakerX + beakerW, beakerY);
+            ctx.stroke();
+
+            // Nivel de líquido
+            const fillPct = Math.min(1.0, appState.volume / 20.0);
+            const liquidHeight = beakerH * fillPct * 0.9;
+            const liquidY = (beakerY + beakerH) - liquidHeight;
+
+            let liquidColor = "rgba(67, 102, 0, 0.4)";
+            if (appState.substance === 'blood') liquidColor = "rgba(225, 29, 72, 0.65)";
+            if (appState.substance === 'mercury') liquidColor = "rgba(100, 116, 139, 0.85)";
+            if (appState.substance === 'oil') liquidColor = "rgba(234, 179, 8, 0.65)";
+            if (appState.substance === 'air') liquidColor = "rgba(224, 242, 254, 0.25)";
+
+            ctx.fillStyle = liquidColor;
+            ctx.fillRect(beakerX + 2, liquidY, beakerW - 4, liquidHeight);
+
+            // Marcas graduadas
+            ctx.strokeStyle = "#475569";
+            ctx.lineWidth = 1;
+            for (let i = 1; i <= 5; i++) {
+                const tickY = (beakerY + beakerH) - (beakerH * 0.9 * (i / 5));
+                ctx.beginPath();
+                ctx.moveTo(beakerX, tickY);
+                ctx.lineTo(beakerX + 12, tickY);
+                ctx.stroke();
+
+                ctx.fillStyle = "#64748b";
+                ctx.font = "10px JetBrains Mono";
+                ctx.fillText(`${(i * 4)}L`, beakerX + 16, tickY + 3);
+            }
+
+            // Placa del sensor de presión
+            const plateX = 320;
+            const plateW = 120;
+            const plateY = h - 55;
+
+            ctx.fillStyle = "#334155";
+            ctx.fillRect(plateX, plateY, plateW, 16);
+            ctx.fillStyle = "#436600";
+            ctx.fillRect(plateX + 10, plateY - 8, plateW - 20, 8);
+
+            // Vector de fuerza normal
+            const arrowStartX = plateX + plateW / 2;
+            const arrowStartY = plateY - 65;
+            const arrowEndY = plateY - 12;
+
+            ctx.strokeStyle = "#dc2626";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(arrowStartX, arrowStartY);
+            ctx.lineTo(arrowStartX, arrowEndY);
+            ctx.stroke();
+
+            ctx.fillStyle = "#dc2626";
+            ctx.beginPath();
+            ctx.moveTo(arrowStartX, arrowEndY + 6);
+            ctx.lineTo(arrowStartX - 6, arrowEndY - 4);
+            ctx.lineTo(arrowStartX + 6, arrowEndY - 4);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = "#991b1b";
+            ctx.font = "bold 11px Outfit, sans-serif";
+            ctx.fillText(`Fuerza Normal F = ${(appState.mass * appState.g).toFixed(1)} N`, plateX - 10, arrowStartY - 6);
+
+            ctx.fillStyle = "#436600";
+            ctx.font = "10px Outfit, sans-serif";
+            ctx.fillText(`Área A = ${appState.area.toFixed(3)} m²`, plateX + 15, plateY + 30);
+        }
+
+        /* ========================================================================= */
+        /* MÓDULO 2: HIDROSTÁTICA                                                    */
+        /* ========================================================================= */
+        function setHydroPreset(depth, density, atm) {
+            document.getElementById('input-hydro-depth').value = depth;
+            document.getElementById('sel-hydro-fluid').value = density;
+            document.getElementById('check-hydro-atm').checked = atm;
+            updateHydroSimulator();
+        }
+
+        function updateHydroSimulator() {
+            const depthInput = document.getElementById('input-hydro-depth');
+            const fluidSelect = document.getElementById('sel-hydro-fluid');
+            const atmCheck = document.getElementById('check-hydro-atm');
+
+            appState.hydroDepth = parseFloat(depthInput.value);
+            appState.hydroDensity = parseFloat(fluidSelect.value);
+            appState.hydroAtm = atmCheck.checked;
+
+            const Ph = appState.hydroDensity * appState.g * appState.hydroDepth;
+            const P0 = appState.hydroAtm ? appState.p0 : 0;
+            const Ptotal = P0 + Ph;
+
+            const Ph_mmHg = Ph / 133.322;
+            const Ptotal_atm = Ptotal / 101325.0;
+            const fractionAtm = (Ph / 101325.0) * 100.0;
+            const ratio = (Ph / 101325.0);
+
+            document.getElementById('val-hydro-depth').innerText = `${appState.hydroDepth.toFixed(2)} m`;
+            document.getElementById('indicator-depth-tag').innerText = `Profundidad h = ${appState.hydroDepth.toFixed(2)} m`;
+
+            document.getElementById('res-hydro-p-pa').innerText = `${Ph.toLocaleString('es-ES', { maximumFractionDigits: 0 })} Pa`;
+            document.getElementById('res-hydro-p-mmhg').innerText = `${Ph_mmHg.toFixed(1)} mmHg`;
+            document.getElementById('res-hydro-p-total').innerText = `${Ptotal.toLocaleString('es-ES', { maximumFractionDigits: 0 })} Pa`;
+            document.getElementById('res-hydro-p-atm').innerText = `${Ptotal_atm.toFixed(3)} atm`;
+            document.getElementById('res-hydro-fraction').innerText = `${fractionAtm.toFixed(1)}% de P₀`;
+            document.getElementById('res-hydro-ratio').innerText = `${ratio.toFixed(3)} : 1`;
+
+            drawHydroCanvas();
+        }
+
+        function drawHydroCanvas() {
+            const canvas = document.getElementById('canvas-hydro');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Tanque de líquido
+            const tankX = 60;
+            const tankY = 35;
+            const tankW = 200;
+            const tankH = 185;
+
+            const grad = ctx.createLinearGradient(0, tankY, 0, tankY + tankH);
+            grad.addColorStop(0, '#bae6fd');
+            grad.addColorStop(1, '#0284c7');
+
+            ctx.fillStyle = grad;
+            ctx.fillRect(tankX, tankY, tankW, tankH);
+
+            ctx.strokeStyle = "#475569";
+            ctx.lineWidth = 2.5;
+            ctx.strokeRect(tankX, tankY, tankW, tankH);
+
+            // Aire atmosférico superior
+            ctx.fillStyle = appState.hydroAtm ? "rgba(241, 245, 249, 0.8)" : "rgba(15, 23, 42, 0.1)";
+            ctx.fillRect(tankX, 10, tankW, 25);
+            ctx.fillStyle = "#475569";
+            ctx.font = "10px Outfit, sans-serif";
+            ctx.fillText(appState.hydroAtm ? "Aire Atmosférico (P₀ = 101.325 Pa)" : "Vacío Superior (P₀ = 0 Pa)", tankX + 10, 24);
+
+            // Sonda manométrica
+            const sensorPixelY = tankY + (appState.hydroDepth / 10.0) * tankH;
+
+            ctx.strokeStyle = "#f59e0b";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(tankX + tankW / 2, tankY);
+            ctx.lineTo(tankX + tankW / 2, sensorPixelY);
+            ctx.stroke();
+
+            ctx.fillStyle = "#d97706";
+            ctx.beginPath();
+            ctx.arc(tankX + tankW / 2, sensorPixelY, 7, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(tankX + tankW / 2, sensorPixelY, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.setLineDash([4, 4]);
+            ctx.strokeStyle = "#ef4444";
+            ctx.beginPath();
+            ctx.moveTo(tankX, sensorPixelY);
+            ctx.lineTo(tankX + tankW, sensorPixelY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Gráfica cartesiana P(h)
+            const graphX = 320;
+            const graphY = 35;
+            const graphW = 150;
+            const graphH = 185;
+
+            ctx.strokeStyle = "#94a3b8";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(graphX, graphY);
+            ctx.lineTo(graphX, graphY + graphH);
+            ctx.lineTo(graphX + graphW, graphY + graphH);
+            ctx.stroke();
+
+            ctx.fillStyle = "#64748b";
+            ctx.font = "9px JetBrains Mono";
+            ctx.fillText("Profundidad (h)", graphX - 10, graphY - 8);
+            ctx.fillText("Presión P(h)", graphX + 80, graphY + graphH + 16);
+
+            const pStartRel = appState.hydroAtm ? 30 : 0;
+            ctx.strokeStyle = "#436600";
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(graphX + pStartRel, graphY);
+            ctx.lineTo(graphX + graphW, graphY + graphH);
+            ctx.stroke();
+
+            const currentGraphY = graphY + (appState.hydroDepth / 10.0) * graphH;
+            const currentGraphX = graphX + pStartRel + ((appState.hydroDepth / 10.0) * (graphW - pStartRel));
+
+            ctx.fillStyle = "#ef4444";
+            ctx.beginPath();
+            ctx.arc(currentGraphX, currentGraphY, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#1e293b";
+            ctx.font = "bold 10px JetBrains Mono";
+            ctx.fillText(`P = ${(appState.hydroDensity * appState.g * appState.hydroDepth / 1000).toFixed(1)} kPa`, currentGraphX + 8, currentGraphY + 4);
+        }
+
+        /* ========================================================================= */
+        /* MÓDULO 3: PASCAL & ARQUÍMEDES                                             */
+        /* ========================================================================= */
+        function setSubModule3(sub) {
+            appState.subMod3 = sub;
+            const pascalView = document.getElementById('subview-pascal');
+            const archView = document.getElementById('subview-archimedes');
+            const btnPascal = document.getElementById('subtab-pascal');
+            const btnArch = document.getElementById('subtab-archimedes');
+
+            if (sub === 'pascal') {
+                pascalView.classList.remove('hidden');
+                archView.classList.add('hidden');
+                btnPascal.className = "px-3 py-1.5 rounded-lg font-bold bg-accent text-white shadow-xs transition";
+                btnArch.className = "px-3 py-1.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-200 transition";
+                drawPascalCanvas();
+            } else {
+                pascalView.classList.add('hidden');
+                archView.classList.remove('hidden');
+                btnPascal.className = "px-3 py-1.5 rounded-lg font-semibold text-gray-600 hover:bg-gray-200 transition";
+                btnArch.className = "px-3 py-1.5 rounded-lg font-bold bg-accent text-white shadow-xs transition";
+                drawArchimedesCanvas();
+            }
+        }
+
+        function setPascalLoad(mass) {
+            appState.pascalLoadMass = mass;
+            updatePascalSimulator();
+        }
+
+        function updatePascalSimulator() {
+            appState.pascalF1 = parseFloat(document.getElementById('input-pascal-f1').value);
+            appState.pascalA1 = parseFloat(document.getElementById('input-pascal-a1').value);
+            appState.pascalA2 = parseFloat(document.getElementById('input-pascal-a2').value);
+
+            const P = appState.pascalF1 / appState.pascalA1;
+            const F2 = P * appState.pascalA2;
+            const maxMass = F2 / appState.g;
+            const areaRatio = appState.pascalA2 / appState.pascalA1;
+
+            document.getElementById('val-pascal-f1').innerText = `${appState.pascalF1.toFixed(0)} N`;
+            document.getElementById('val-pascal-a1').innerText = `${appState.pascalA1.toFixed(3)} m² (${(appState.pascalA1 * 10000).toFixed(0)} cm²)`;
+            document.getElementById('val-pascal-a2').innerText = `${appState.pascalA2.toFixed(3)} m² (${(appState.pascalA2 * 10000).toFixed(0)} cm²)`;
+            document.getElementById('val-pascal-ratio').innerText = `${areaRatio.toFixed(1)} x`;
+
+            document.getElementById('res-pascal-p').innerText = `${P.toLocaleString('es-ES', { maximumFractionDigits: 0 })} Pa`;
+            document.getElementById('res-pascal-f2').innerText = `${F2.toLocaleString('es-ES', { maximumFractionDigits: 0 })} N`;
+            document.getElementById('res-pascal-max-mass').innerText = `${maxMass.toFixed(1)} kg`;
+
+            const statusBadge = document.getElementById('pascal-lift-status');
+            const loadWeight = appState.pascalLoadMass * appState.g;
+            if (F2 >= loadWeight) {
+                statusBadge.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200";
+                statusBadge.innerHTML = `Carga (${appState.pascalLoadMass} kg) Elevada Exitosamente`;
+            } else {
+                statusBadge.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200";
+                statusBadge.innerHTML = `Fuerza insuficiente (Faltan ${(loadWeight - F2).toFixed(0)} N)`;
+            }
+
+            drawPascalCanvas();
+        }
+
+        function drawPascalCanvas() {
+            const canvas = document.getElementById('canvas-pascal');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            const p1X = 80;
+            const p1W = 45;
+            const p2X = 290;
+            const p2W = 150;
+            const baseY = h - 45;
+
+            // Fluido hidráulico
+            ctx.fillStyle = "#93c5fd";
+            ctx.beginPath();
+            ctx.rect(p1X, 95, p1W, baseY - 95);
+            ctx.rect(p1X, baseY - 35, p2X + p2W - p1X, 35);
+            ctx.rect(p2X, 115, p2W, baseY - 115);
+            ctx.fill();
+
+            // Conducto
+            ctx.strokeStyle = "#334155";
+            ctx.lineWidth = 3.5;
+            ctx.beginPath();
+            ctx.moveTo(p1X, 70);
+            ctx.lineTo(p1X, baseY);
+            ctx.lineTo(p2X + p2W, baseY);
+            ctx.lineTo(p2X + p2W, 80);
+            ctx.moveTo(p1X + p1W, 70);
+            ctx.lineTo(p1X + p1W, baseY - 35);
+            ctx.lineTo(p2X, baseY - 35);
+            ctx.lineTo(p2X, 80);
+            ctx.stroke();
+
+            // Pistón 1
+            const p1Y = 105;
+            ctx.fillStyle = "#475569";
+            ctx.fillRect(p1X + 2, p1Y, p1W - 4, 16);
+            ctx.strokeStyle = "#dc2626";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(p1X + p1W / 2, p1Y - 30);
+            ctx.lineTo(p1X + p1W / 2, p1Y);
+            ctx.stroke();
+
+            ctx.fillStyle = "#991b1b";
+            ctx.font = "bold 11px Outfit, sans-serif";
+            ctx.fillText(`F₁ = ${appState.pascalF1} N`, p1X - 10, p1Y - 35);
+
+            // Pistón 2
+            const p2Y = 125;
+            ctx.fillStyle = "#1e293b";
+            ctx.fillRect(p2X + 2, p2Y, p2W - 4, 22);
+
+            // Carga
+            ctx.fillStyle = "#436600";
+            ctx.fillRect(p2X + 25, p2Y - 40, p2W - 50, 40);
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 11px Outfit, sans-serif";
+            ctx.fillText(`Carga: ${appState.pascalLoadMass} kg`, p2X + 40, p2Y - 16);
+
+            // Vector F2
+            ctx.strokeStyle = "#16a34a";
+            ctx.lineWidth = 3.5;
+            ctx.beginPath();
+            ctx.moveTo(p2X + p2W / 2, p2Y);
+            ctx.lineTo(p2X + p2W / 2, p2Y - 18);
+            ctx.stroke();
+
+            ctx.fillStyle = "#436600";
+            ctx.font = "bold 10px JetBrains Mono";
+            ctx.fillText(`Presión homogénea P = ${(appState.pascalF1 / appState.pascalA1 / 1000).toFixed(1)} kPa`, 130, baseY - 12);
+        }
+
+        function setArchBody(material) {
+            const mats = {
+                wood: 600,
+                human: 980,
+                neutral: 1000,
+                iron: 7800
+            };
+            appState.archBodyDensity = mats[material];
+            document.getElementById('input-arch-density').value = Math.min(2500, appState.archBodyDensity);
+
+            ['wood', 'human', 'neutral', 'iron'].forEach(m => {
+                const btn = document.getElementById(`arch-mat-${m}`);
+                if (btn) {
+                    if (m === material) {
+                        btn.className = "p-2 border-2 border-accent bg-accent-light text-accent rounded-xl font-bold text-left";
+                    } else {
+                        btn.className = "p-2 border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl font-semibold text-left";
+                    }
+                }
+            });
+
+            updateArchimedesSimulator();
+        }
+
+        function updateArchimedesSimulator() {
+            appState.archFluidDensity = parseFloat(document.getElementById('sel-arch-fluid').value);
+            appState.archBodyVolume = parseFloat(document.getElementById('input-arch-vol').value);
+            appState.archBodyDensity = parseFloat(document.getElementById('input-arch-density').value);
+
+            const P_cuerpo = appState.archBodyDensity * appState.archBodyVolume * appState.g;
+            const E_max = appState.archFluidDensity * appState.archBodyVolume * appState.g;
+
+            let subPct = 0;
+            let E_actual = 0;
+            let statusText = "";
+            let statusClass = "";
+
+            if (appState.archBodyDensity < appState.archFluidDensity) {
+                subPct = (appState.archBodyDensity / appState.archFluidDensity) * 100.0;
+                E_actual = P_cuerpo;
+                statusText = `Flotación Parcial en Equilibrio (E = P)`;
+                statusClass = "px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200";
+            } else if (Math.abs(appState.archBodyDensity - appState.archFluidDensity) < 1) {
+                subPct = 100.0;
+                E_actual = P_cuerpo;
+                statusText = `Flotación Neutra / Suspensión Total (E = P)`;
+                statusClass = "px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200";
+            } else {
+                subPct = 100.0;
+                E_actual = E_max;
+                statusText = `Hundimiento al Fondo (P > E)`;
+                statusClass = "px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-200";
+            }
+
+            document.getElementById('val-arch-vol').innerText = `${appState.archBodyVolume.toFixed(3)} m³ (${(appState.archBodyVolume * 1000).toFixed(0)} L)`;
+            document.getElementById('val-arch-density').innerText = `${appState.archBodyDensity.toFixed(0)} kg/m³`;
+
+            document.getElementById('res-arch-weight').innerText = `${P_cuerpo.toFixed(1)} N`;
+            document.getElementById('res-arch-buoyancy').innerText = `${E_actual.toFixed(1)} N`;
+            document.getElementById('res-arch-submerged-pct').innerText = `${subPct.toFixed(1)}%`;
+
+            const badge = document.getElementById('arch-equilibrium-badge');
+            badge.className = statusClass;
+            badge.innerText = statusText;
+
+            drawArchimedesCanvas();
+        }
+
+        function drawArchimedesCanvas() {
+            const canvas = document.getElementById('canvas-archimedes');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            const tankX = 90;
+            const tankY = 40;
+            const tankW = 340;
+            const tankH = 175;
+            const waterLineY = tankY + 30;
+
+            ctx.fillStyle = "rgba(56, 189, 248, 0.35)";
+            ctx.fillRect(tankX, waterLineY, tankW, tankH - 30);
+
+            ctx.strokeStyle = "#94a3b8";
+            ctx.lineWidth = 2.5;
+            ctx.strokeRect(tankX, tankY, tankW, tankH);
+
+            const boxW = 75;
+            const boxH = 75;
+            const boxX = tankX + tankW / 2 - boxW / 2;
+
+            const subRatio = Math.min(1.0, appState.archBodyDensity / appState.archFluidDensity);
+            let boxY;
+
+            if (appState.archBodyDensity > appState.archFluidDensity) {
+                boxY = tankY + tankH - boxH;
+            } else {
+                boxY = waterLineY - (boxH * (1.0 - subRatio));
+            }
+
+            ctx.fillStyle = appState.archBodyDensity > 1500 ? "#64748b" : (appState.archBodyDensity < 800 ? "#d97706" : "#436600");
+            ctx.fillRect(boxX, boxY, boxW, boxH);
+            ctx.strokeStyle = "#1e293b";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+            const centerX = boxX + boxW / 2;
+            const centerY = boxY + boxH / 2;
+
+            // Vector Peso (Rojo)
+            const weightLen = 40;
+            ctx.strokeStyle = "#ef4444";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX, centerY + weightLen);
+            ctx.stroke();
+
+            ctx.fillStyle = "#ef4444";
+            ctx.beginPath();
+            ctx.arc(centerX, centerY + weightLen, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.font = "bold 11px Outfit, sans-serif";
+            ctx.fillText(`P = ${(appState.archBodyDensity * appState.archBodyVolume * appState.g).toFixed(0)} N`, centerX + 8, centerY + weightLen);
+
+            // Vector Empuje (Verde)
+            const buoyLen = Math.min(weightLen, weightLen * (appState.archFluidDensity / appState.archBodyDensity));
+            ctx.strokeStyle = "#10b981";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX, centerY - buoyLen);
+            ctx.stroke();
+
+            ctx.fillStyle = "#10b981";
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - buoyLen, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText(`E = ${(appState.archFluidDensity * appState.archBodyVolume * appState.g * Math.min(1.0, appState.archBodyDensity / appState.archFluidDensity)).toFixed(0)} N`, centerX + 8, centerY - buoyLen + 4);
+        }
+
+        /* ========================================================================= */
+        /* MÓDULO 4: FLUIDOS CORPORALES                                              */
+        /* ========================================================================= */
+        function selectBioSystem(sys) {
+            appState.bioSystem = sys;
+
+            ['arterial', 'pulmonary', 'ocular', 'cavities'].forEach(s => {
+                const btn = document.getElementById(`bio-btn-${s}`);
+                if (btn) {
+                    if (s === sys) {
+                        btn.className = "w-full text-left p-3 rounded-xl border-2 border-accent bg-accent-light text-accent transition flex items-center justify-between shadow-xs";
+                    } else {
+                        btn.className = "w-full text-left p-3 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition flex items-center justify-between";
+                    }
+                }
+            });
+
+            const paramLabel = document.getElementById('bio-param-label');
+            const paramVal = document.getElementById('bio-param-val');
+            const sliderExtremes = document.getElementById('bio-slider-extremes');
+            const canvasTitle = document.getElementById('bio-canvas-title');
+            const cardHeading = document.getElementById('bio-card-heading');
+            const cardSub = document.getElementById('bio-card-subheading');
+            const cardExplanation = document.getElementById('bio-card-explanation');
+            const metricsContainer = document.getElementById('bio-card-metrics');
+
+            if (sys === 'arterial') {
+                paramLabel.innerText = "Fase Cardíaca / Tensión:";
+                paramVal.innerText = "Sístole (120 mmHg)";
+                sliderExtremes.innerHTML = "<span>Diástole (80 mmHg)</span><span>Sístole (120 mmHg)</span>";
+                canvasTitle.innerHTML = `<i class="fa-solid fa-heart-pulse text-accent"></i> Hemodinámica Arterial: Curva de Presión Pulsátil`;
+                cardHeading.innerText = "Análisis Fisicoquímico: Presión Arterial";
+                cardSub.innerText = "Presión hidrostática pulsátil generada por la eyección ventricular";
+                metricsContainer.innerHTML = `
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">Presión Sistólica</span>
+                        <span class="text-rose-700 font-bold text-sm">120 mmHg (16.0 kPa)</span>
+                    </div>
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">Presión Diastólica</span>
+                        <span class="text-blue-700 font-bold text-sm">80 mmHg (10.7 kPa)</span>
+                    </div>
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">Presión Arterial Media</span>
+                        <span class="text-emerald-700 font-bold text-sm">93.3 mmHg (12.4 kPa)</span>
+                    </div>
+                `;
+                cardExplanation.innerHTML = `<strong>Mecanismo Biofísico:</strong> La eyección ventricular izquierda transmite energía hidrostática pulsátil a la aorta. Durante la diástole, el retroceso elástico parietal (efecto Windkessel) mantiene el flujo continuo hacia los capilares periféricos.`;
+            } else if (sys === 'pulmonary') {
+                paramLabel.innerText = "Fase del Ciclo Ventilatorio:";
+                paramVal.innerText = "Inspiración Profunda";
+                sliderExtremes.innerHTML = "<span>Espiración (-5 cmH₂O)</span><span>Inspiración (-8 cmH₂O)</span>";
+                canvasTitle.innerHTML = `<i class="fa-solid fa-lungs text-sky-600"></i> Mecánica Pulmonar: Presión Intrapleural y Alveolar`;
+                cardHeading.innerText = "Fisicoquímica Respiratoria: Presión Intrapleural";
+                cardSub.innerText = "Gradiente transmural y ley de Boyle en la mecánica ventilatoria";
+                metricsContainer.innerHTML = `
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">P. Intrapleural Reposo</span>
+                        <span class="text-sky-700 font-bold text-sm">-5 cmH₂O (-490 Pa)</span>
+                    </div>
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">P. Intrapleural Inspiración</span>
+                        <span class="text-accent font-bold text-sm">-8 cmH₂O (-785 Pa)</span>
+                    </div>
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">Presión Transpulmonar</span>
+                        <span class="text-emerald-700 font-bold text-sm">+5 a +8 cmH₂O</span>
+                    </div>
+                `;
+                cardExplanation.innerHTML = `<strong>Ley de Boyle (P₁V₁ = P₂V₂):</strong> La contracción del diafragma incrementa el volumen torácico, volviendo la presión intrapleural aún más negativa respecto a la atmosférica y distendiendo los alvéolos para permitir el ingreso pasivo de aire.`;
+            } else if (sys === 'ocular') {
+                paramLabel.innerText = "Presión Intraocular (PIO):";
+                paramVal.innerText = "Normal: 15.0 mmHg";
+                sliderExtremes.innerHTML = "<span>Hipotensión (8 mmHg)</span><span>Glaucoma (>22 mmHg)</span>";
+                canvasTitle.innerHTML = `<i class="fa-solid fa-eye text-amber-600"></i> Cámara Ocular y Tensión por Humor Acuoso`;
+                cardHeading.innerText = "Presión Intraocular y Dinámica de Fluidos";
+                cardSub.innerText = "Producción en cuerpo ciliar vs. drenaje por la malla trabecular";
+                metricsContainer.innerHTML = `
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">PIO Fisiológica Normal</span>
+                        <span class="text-amber-700 font-bold text-sm">10 a 21 mmHg</span>
+                    </div>
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">Equivalente en SI</span>
+                        <span class="text-accent font-bold text-sm">1.333 a 2.800 Pa</span>
+                    </div>
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">Riesgo Glaucomatoso</span>
+                        <span class="text-rose-700 font-bold text-sm">> 22 mmHg (Compresión)</span>
+                    </div>
+                `;
+                cardExplanation.innerHTML = `<strong>Dinámica del Humor Acuoso:</strong> La PIO mantiene la geometría esférica del ojo indispensable para la refracción en la retina. El bloqueo en el conducto de Schlemm eleva la presión hidrostática comprimiendo el nervio óptico.`;
+            } else {
+                paramLabel.innerText = "Presión en Cavidades Protegidas:";
+                paramVal.innerText = "LCR: 10 mmHg (1.33 kPa)";
+                sliderExtremes.innerHTML = "<span>Articulación (-4 mmHg)</span><span>PIC Alta (>20 mmHg)</span>";
+                canvasTitle.innerHTML = `<i class="fa-solid fa-brain text-purple-600"></i> Presión en LCR y Espacios Articulares`;
+                cardHeading.innerText = "Presión Intracraneal (PIC) y Fluido Sinovial";
+                cardSub.innerText = "Doctrina de Monro-Kellie y lubricación por película de presión";
+                metricsContainer.innerHTML = `
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">Presión LCR Supino</span>
+                        <span class="text-purple-700 font-bold text-sm">7 a 15 mmHg (90-180 mmH₂O)</span>
+                    </div>
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">Presión Intra-articular</span>
+                        <span class="text-accent font-bold text-sm">-2 a -5 mmHg (Negativa)</span>
+                    </div>
+                    <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <span class="text-gray-400 text-[10px] block">Amortiguación Cefálica</span>
+                        <span class="text-emerald-700 font-bold text-sm">Empuje Arquímedes (~97%)</span>
+                    </div>
+                `;
+                cardExplanation.innerHTML = `<strong>Efecto Arquímedes en el Encéfalo:</strong> El cerebro pesa ~1400 g en el aire, pero sumergido en LCR (&rho; &approx; 1007 kg/m³) su peso neto aparente es de sólo ~50 g, evitando que se colapse sobre la base del cráneo.`;
+            }
+
+            updateBioSimulator();
+        }
+
+        function updateBioSimulator() {
+            const slider = document.getElementById('bio-param-slider');
+            appState.bioSliderValue = parseInt(slider.value);
+            drawBioCanvas();
+        }
+
+        function drawBioCanvas() {
+            const canvas = document.getElementById('canvas-bio');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            if (appState.bioSystem === 'arterial') {
+                ctx.strokeStyle = "#e2e8f0";
+                ctx.lineWidth = 1;
+                for (let y = 30; y < h - 30; y += 40) {
+                    ctx.beginPath();
+                    ctx.moveTo(40, y);
+                    ctx.lineTo(w - 40, y);
+                    ctx.stroke();
+                }
+
+                ctx.strokeStyle = "#e11d48";
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+
+                const baseY = h - 55;
+                const amp = 75 * (appState.bioSliderValue / 100.0);
+
+                for (let x = 40; x < w - 40; x++) {
+                    const t = (x - 40) * 0.05;
+                    const cycle = t % (Math.PI * 2);
+                    let yOffset = Math.sin(cycle) * amp;
+                    if (cycle > Math.PI) yOffset *= 0.35;
+                    const y = baseY - yOffset;
+                    if (x === 40) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+
+                ctx.fillStyle = "#1e293b";
+                ctx.font = "bold 12px JetBrains Mono";
+                const currentP = 80 + (40 * (appState.bioSliderValue / 100.0));
+                ctx.fillText(`P_arterial = ${currentP.toFixed(0)} mmHg (${(currentP * 133.322).toFixed(0)} Pa)`, 50, 40);
+
+            } else if (appState.bioSystem === 'pulmonary') {
+                const lungRadius = 45 + (appState.bioSliderValue * 0.35);
+
+                ctx.fillStyle = "rgba(56, 189, 248, 0.25)";
+                ctx.beginPath();
+                ctx.arc(w / 2 - 60, h / 2, lungRadius, 0, Math.PI * 2);
+                ctx.arc(w / 2 + 60, h / 2, lungRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = "#0284c7";
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                ctx.fillStyle = "#1e293b";
+                ctx.font = "bold 12px JetBrains Mono";
+                const pip = -5 - (3 * (appState.bioSliderValue / 100.0));
+                ctx.fillText(`P_intrapleural = ${pip.toFixed(1)} cmH₂O (${(pip * 98.0665).toFixed(0)} Pa)`, w / 2 - 120, 35);
+
+            } else if (appState.bioSystem === 'ocular') {
+                ctx.strokeStyle = "#d97706";
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(w / 2, h / 2, 65, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(w / 2 + 60, h / 2, 30, -Math.PI / 3, Math.PI / 3);
+                ctx.strokeStyle = "#0284c7";
+                ctx.stroke();
+
+                ctx.fillStyle = "#1e293b";
+                ctx.font = "bold 12px JetBrains Mono";
+                const pio = 10 + (12 * (appState.bioSliderValue / 100.0));
+                ctx.fillText(`PIO = ${pio.toFixed(1)} mmHg (${(pio * 133.322).toFixed(0)} Pa)`, w / 2 - 85, 35);
+
+            } else {
+                ctx.strokeStyle = "#7e22ce";
+                ctx.lineWidth = 3.5;
+                ctx.strokeRect(w / 2 - 90, h / 2 - 55, 180, 110);
+
+                ctx.fillStyle = "rgba(168, 85, 247, 0.25)";
+                ctx.fillRect(w / 2 - 80, h / 2 - 45, 160, 90);
+
+                ctx.fillStyle = "#1e293b";
+                ctx.font = "bold 12px JetBrains Mono";
+                ctx.fillText("LCR: ρ = 1007 kg/m³ (Amortigua peso encefálico)", w / 2 - 135, 35);
+            }
+        }
+
+        /* ========================================================================= */
+        /* MÓDULO 5: CASOS CLÍNICOS                                                  */
+        /* ========================================================================= */
+        function checkCaseFQ(caseNum, option) {
+            const feedback = document.getElementById(`feedback-fq-${caseNum}`);
+            feedback.classList.remove('hidden');
+
+            if (caseNum === 1) {
+                if (option === 'A') {
+                    feedback.className = "mt-2 p-3 rounded-xl text-xs leading-relaxed bg-emerald-50 text-emerald-900 border border-emerald-200";
+                    feedback.innerHTML = "<strong>¡Correcto!</strong> El empuje de Arquímedes contrarresta la mayor parte del peso corporal en inmersión, permitiendo ejercitar la musculatura periarticular y la propiocepción sin someter al injerto a sobrecargas de cizallamiento.";
+                } else {
+                    feedback.className = "mt-2 p-3 rounded-xl text-xs leading-relaxed bg-rose-50 text-rose-900 border border-rose-200";
+                    feedback.innerHTML = "<strong>Incorrecto.</strong> El agua disminuye el peso aparente gracias a la fuerza de empuje ascensional, no lo duplica.";
+                }
+            } else if (caseNum === 2) {
+                if (option === 'A') {
+                    feedback.className = "mt-2 p-3 rounded-xl text-xs leading-relaxed bg-emerald-50 text-emerald-900 border border-emerald-200";
+                    feedback.innerHTML = "<strong>¡Correcto!</strong> La columna de 1.35 m eleva la presión transmural en las vénulas distales. La contracción activa de la pantorrilla genera picos de presión intramuscular que comprimen las venas profundas y propulsan la sangre hacia el corazón.";
+                } else {
+                    feedback.className = "mt-2 p-3 rounded-xl text-xs leading-relaxed bg-rose-50 text-rose-900 border border-rose-200";
+                    feedback.innerHTML = "<strong>Incorrecto.</strong> La sangre permanece líquida; el problema es puramente mecánico e hidrostático por falta de bombeo muscular.";
+                }
+            } else if (caseNum === 3) {
+                if (option === 'A') {
+                    feedback.className = "mt-2 p-3 rounded-xl text-xs leading-relaxed bg-emerald-50 text-emerald-900 border border-emerald-200";
+                    feedback.innerHTML = "<strong>¡Correcto!</strong> Siguiendo la Ley de Boyle, la expansión del volumen intratorácico profundiza la presión negativa intrapleural, traccionando el tejido pulmonar hacia afuera e incrementando la superficie de intercambio gaseoso.";
+                } else {
+                    feedback.className = "mt-2 p-3 rounded-xl text-xs leading-relaxed bg-rose-50 text-rose-900 border border-rose-200";
+                    feedback.innerHTML = "<strong>Incorrecto.</strong> Durante la inspiración la presión intrapleural se vuelve más negativa (subatmosférica) para distender los pulmones, no positiva.";
+                }
+            }
+        }
+
+        window.onload = function() {
+            updatePropSimulator();
+            updateHydroSimulator();
+            updatePascalSimulator();
+            updateArchimedesSimulator();
+            updateBioSimulator();
+        };
+    </script>
+</body>
+</html>
